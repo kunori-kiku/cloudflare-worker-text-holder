@@ -27,6 +27,12 @@ Set the following variables in your Cloudflare Worker:
 | `BAN_TIME`        | Duration (in milliseconds) for which a banned IP remains banned.           |
 | `SUPER_TOKEN`     | Secret token for performing super admin operations.                        |
 
+### GUI Setup
+1. Log in to your CloudFlare Dashboard
+2. Click `Workers and Pages` to your created worker, click `Settings - Variables and Secrets`
+3. Click `Add`, then add an entry named as the left part of the table, values may refer to `_wrangler.toml`
+4. Preferrably, use `Secret` option when you insert in your Github token
+
 ## KV Namespace Setup
 
 ### Wrangler Setup
@@ -52,7 +58,8 @@ Create and bind KV namespaces for storing user data and failed login attempts:
 
 1. Login to your CloudFlare Dashboard
 2. Click `Storage & Databases - KV - Create`, and insert a preferred name
-3. Click `Workers and Pages` back to your created worker
+3. Click `Workers and Pages` back to your created worker, click `Settings - Bindings`
+4. Click `Add`, then add an entry named `KV`, pointing to the KV you just created
 
 ## Endpoints
 
@@ -143,6 +150,6 @@ curl -X GET "https://worker-domain/listUser?superToken=secret"
 1. Log in to your Cloudflare dashboard.
 2. Navigate to the Workers section and create a new Worker.
 3. Copy the Worker script into the editor.
-4. Set the required environment variables and bind [KV namespaces](##KV-Namespace-Setup)
+4. Set the required environment variables and bind KV namespaces (according to above)
 5. Save and deploy the Worker.
 
