@@ -1,0 +1,32 @@
+name = "github-worker"
+type = "javascript"
+
+[env]
+kv_namespaces = [
+  { binding = "KV", id = "your_kv_namespace_id" }
+]
+
+[vars]
+# GitHub fine-grained personal access token
+GITHUB_TOKEN = "your_github_token"
+
+# GitHub username
+GITHUB_USERNAME = "your_github_username"
+
+# Repository name in GitHub (e.g., 'username/repo')
+REPO_NAME = "your_repository_name"
+
+# Directory path in the repository containing files
+DIRECTORY_PATH = "your_directory_path"
+
+# Branch name to fetch files from
+BRANCH = "your_branch_name"
+
+# Number of allowed failures before banning an IP
+FAIL_LIMIT = "5"
+
+# Time to ban an IP (in milliseconds)
+BAN_TIME = "3600000" # e.g., 1 hour
+
+# Super user token for admin actions
+SUPER_TOKEN = "your_super_user_token"
