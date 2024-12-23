@@ -44,7 +44,7 @@ export default {
       record.lastFailedTime = Date.now();
       record.failureCount += 1;
       await env.KV.put(listName + ip, JSON.stringify(record));
-    } free
+    }
 
     async function checkSuperAuth() {
       if (await isBanned('superFail-')) return new Response('', { status: 403 });
