@@ -18,6 +18,10 @@ export default {
     } = env;
 
     // Helper functions
+    function sanitize(input) {
+      return input.replace(/[^a-zA-Z0-9_-]/g, '');
+    }
+
     async function isBanned(listName) {
       const record = await env.KV.get(listName + ip, { type: 'json' });
       if (!record) return false;
@@ -40,7 +44,7 @@ export default {
       record.lastFailedTime = Date.now();
       record.failureCount += 1;
       await env.KV.put(listName + ip, JSON.stringify(record));
-    }
+    } free
 
     async function checkSuperAuth() {
       if (await isBanned('superFail-')) return new Response('', { status: 403 });
@@ -55,15 +59,18 @@ export default {
       if (await isBanned('loginFail-')) return new Response('', { status: 403 });
 
       const { username, password } = params;
+      const sanitizedUsername = sanitize(username);
+      const sanitizedPassword = sanitize(password);
+
       const userList = JSON.parse(await env.KV.get('userList', { type: 'text' }) || '{}');
 
-      if (!userList[username] || userList[username] !== password) {
+      if (!userList[sanitizedUsername] || userList[sanitizedUsername] !== sanitizedPassword) {
         await addFailure('loginFail-');
         return new Response('Bad logon', { status: 403 });
       }
 
       const fileResponse = await fetch(
-        `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${DIRECTORY_PATH}/${username}.txt?ref=${BRANCH}`,
+        `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${DIRECTORY_PATH}/${sanitizedUsername}.txt?ref=${BRANCH}`,
         { 
           headers: { 
             Authorization: `Bearer ${GITHUB_TOKEN}`,
@@ -92,7 +99,9 @@ export default {
 
     switch (method) {
       case 'addUser':
-        userList[params.username] = params.password;
+        const sanitizedAddUsername = sanitize(params.username);
+        const sanitizedAddPassword = sanitize(params.password);
+        userList[sanitizedAddUsername] = sanitizedAddPassword;
         await env.KV.put('userList', JSON.stringify(userList));
         return new Response('User added', { status: 200 });
 
@@ -100,7 +109,8 @@ export default {
         return new Response(JSON.stringify(Object.keys(userList)), { headers: { 'Content-Type': 'application/json' } });
 
       case 'removeUser':
-        delete userList[params.username];
+        const sanitizedRemoveUsername = sanitize(params.username);
+        delete userList[sanitizedRemoveUsername];
         await env.KV.put('userList', JSON.stringify(userList));
         return new Response('User removed', { status: 200 });
 
