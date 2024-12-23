@@ -1,6 +1,8 @@
-# Cloudflare Worker for GitHub File Access
+# Cloudflare Worker Text Holder
+[**中文文档**](README_CN.md)
 
-This Cloudflare Worker provides secure access to files in a private GitHub repository using predefined user credentials and super admin operations.
+
+This Cloudflare Worker source code provides secure access to files in a private GitHub repository using predefined user credentials and super admin operations.
 
 ## Features
 
