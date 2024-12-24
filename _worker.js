@@ -87,7 +87,7 @@ export default {
 
       const fileContent = await fileResponse.text();
       return new Response(fileContent, {
-        headers: { 'Content-Type': 'text/plain' },
+        headers: { 'Content-Type': 'text/plain; charset=utf-8' }
       });
     }
 
