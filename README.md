@@ -15,9 +15,15 @@ This Cloudflare Worker source code provides secure access to files in a private 
   - List or clear IPs with failed login attempts.
 
 ## Known bug
-When browser is used to perform super-user operations, the operation, while successful, may be marked as failed and add the count of failed attempts.
 
-It will be more than welcomed to post a pull request to fix this bug. I am unable to do so due to my incompetence in JavaScript.
+**Bug**:
+When browser is used to perform super-user operations, the operation, while successful, may add the count of failed attempts.
+**Cause**:
+The browser will request the /favicon.ico at the root directory, which causes the problem and add the count of failures
+**Mitigation**:
+Add customized rules in Cloudflare security to whitelist the requested path
+
+
 
 ## Environment Variables
 
