@@ -14,6 +14,11 @@ This Cloudflare Worker source code provides secure access to files in a private 
   - Add, list, and remove users.
   - List or clear IPs with failed login attempts.
 
+## Known bug
+When browser is used to perform super-user operations, the operation, while successful, may be marked as failed and add the count of failed attempts.
+
+It will be more than welcomed to post a pull request to fix this bug. I am unable to do so due to my incompetence in JavaScript.
+
 ## Environment Variables
 
 Set the following variables in your Cloudflare Worker:
