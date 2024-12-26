@@ -13,6 +13,19 @@
   - 添加、列出和移除用户。
   - 列出或清除登录失败的 IP。
 
+## 已知Bug
+**Bug**:
+当使用浏览器执行超级用户操作时，尽管操作会成功，但是失败次数仍然会上升
+**原因**:
+浏览器会在根目录请求 /favicon.ico，从而导致此问题并增加失败次数
+**缓解**:
+在Cloudflare该域名下的Security部分增加防火墙规则以过白请求路径
+```
+(http.host in {"worker.domain.to.request"} and not http.request.uri.path in {"/get" "/addUser" "/removeUser" "/listUser" "/listFailIP" "/clearFailIP"})
+
+Action: Block
+```
+
 ## 环境变量
 
 在 Cloudflare Worker 中设置以下变量：
