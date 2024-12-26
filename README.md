@@ -22,7 +22,11 @@ When browser is used to perform super-user operations, the operation, while succ
 The browser will request the /favicon.ico at the root directory, which causes the problem and add the count of failures
 **Mitigation**:
 Add customized rules in Cloudflare security to whitelist the requested path
+```
+(http.host in {"worker.domain.to.request"} and not http.request.uri.path in {"/get" "/addUser" "/removeUser" "/listUser" "/listFailIP" "/clearFailIP"})
 
+Action: Block
+```
 
 
 ## Environment Variables
