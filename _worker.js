@@ -33,7 +33,7 @@ export default {
         if (now - lastFailedTime < BAN_TIME) {
           return true;
         } else {
-          await env.KV.put(listName + ip, JSON.stringify({ lastFailedTime: now, failureCount: 0 }));
+          await resetFailure(listName); // Reset failure count if ban time has passed
         }
       }
       return false;
@@ -46,12 +46,17 @@ export default {
       await env.KV.put(listName + ip, JSON.stringify(record));
     }
 
+    async function resetFailure(listName) {
+      await env.KV.put(listName + ip, JSON.stringify({ lastFailedTime: 0, failureCount: 0 }));
+    }
+
     async function checkSuperAuth() {
       if (await isBanned('superFail-')) return new Response('', { status: 403 });
       if (params.superToken !== SUPER_TOKEN) {
         await addFailure('superFail-');
         return new Response('', { status: 403 });
       }
+      await resetFailure('superFail-'); // Reset failure count on successful superuser login
     }
 
     // Normal user requests
@@ -68,6 +73,8 @@ export default {
         await addFailure('loginFail-');
         return new Response('Bad logon', { status: 403 });
       }
+
+      await resetFailure('loginFail-'); // Reset failure count on successful login
 
       const fileResponse = await fetch(
         `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${DIRECTORY_PATH}/${sanitizedUsername}.txt?ref=${BRANCH}`,
